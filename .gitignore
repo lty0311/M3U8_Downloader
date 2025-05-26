@@ -1,0 +1,12 @@
+*.log
+*.out
+*.md
+*.gz
+*.tar
+*.tgz
+*.zip
+*.spec
+.idea
+build
+buildDist
+venv
