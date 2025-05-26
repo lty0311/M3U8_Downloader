@@ -28,6 +28,7 @@ jobs:
           # 创建必要的目录
           mkdir ffmpeg
           mkdir downloads
+          echo "Placeholder" > buildDist/downloads/.gitkeep
           # 执行打包脚本
           build.bat
           
