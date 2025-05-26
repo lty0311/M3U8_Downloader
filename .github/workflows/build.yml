@@ -23,11 +23,13 @@ jobs:
           pip install -r requirements.txt
           
       - name: Run build script
+        shell: cmd
         run: |
           # 创建必要的目录
-          mkdir ffmpeg downloads
+          mkdir ffmpeg
+          mkdir downloads
           # 执行打包脚本
-          call build.bat
+          build.bat
           
       - name: Upload artifact
         uses: actions/upload-artifact@v4
