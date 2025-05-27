@@ -2,8 +2,8 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*'  # 模式匹配所有 v 开头的 tag
-  workflow_dispatch:  # 允许手动触发
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
   build-windows:
@@ -22,12 +22,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           
-      - name: Run build script
+      - name: Prepare directories
         shell: cmd
         run: |
           mkdir ffmpeg
-          mkdir downloads
-          echo "Placeholder" > downloads/.gitkeep
+          mkdir buildDist\downloads
+          echo. > buildDist\downloads\.gitkeep
           build.bat
           
       - name: Upload artifact
@@ -49,16 +49,26 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: windows-package
-          path: ./artifacts
+          path: artifacts
           
-      - name: Create structured ZIP  # 新增的关键步骤
+      - name: Create structured ZIP
         run: |
+          # 创建目标目录结构
           mkdir -p package/ffmpeg package/downloads
+          
+          # 复制主文件和配置
           cp artifacts/M3U8_Downloader.exe package/
           cp artifacts/config.ini package/
-          cp artifacts/ffmpeg/* package/ffmpeg/
-          cp artifacts/downloads/.gitkeep package/downloads/
           
+          # 复制ffmpeg（确保文件存在）
+          if [ -f "artifacts/ffmpeg/ffmpeg.exe" ]; then
+            cp artifacts/ffmpeg/ffmpeg.exe package/ffmpeg/
+          fi
+          
+          # 处理downloads目录（无条件创建，即使为空）
+          touch package/downloads/.gitkeep
+          
+          # 打包
           cd package
           zip -r ../M3U8_Downloader-${{ github.ref_name }}.zip *
           cd ..
@@ -67,6 +77,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
-          files: M3U8_Downloader-${{ github.ref_name }}.zip  # 改为只上传ZIP
+          files: M3U8_Downloader-${{ github.ref_name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
