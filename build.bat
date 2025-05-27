@@ -10,7 +10,7 @@ if not exist "venv" (
 
 call ./venv/Scripts/activate.bat
 
-:: ¼ì²é requests °üÊÇ·ñÒÑ°²×°
+:: æ£€æŸ¥ requests åŒ…æ˜¯å¦å·²å®‰è£…
 pip show requests >nul 2>&1
 if %ERRORLEVEL%==0 (
     set REQUESTS_INSTALLED=true
@@ -18,7 +18,7 @@ if %ERRORLEVEL%==0 (
     set REQUESTS_INSTALLED=false
 )
 
-:: ¼ì²é natsort °üÊÇ·ñÒÑ°²×°
+:: æ£€æŸ¥ natsort åŒ…æ˜¯å¦å·²å®‰è£…
 pip show natsort >nul 2>&1
 if %ERRORLEVEL%==0 (
     set NATSORT_INSTALLED=true
@@ -26,20 +26,20 @@ if %ERRORLEVEL%==0 (
     set NATSORT_INSTALLED=false
 )
 
-:: ÅĞ¶ÏÊÇ·ñÁ½¸ö°ü¶¼Î´°²×°
+:: åˆ¤æ–­æ˜¯å¦ä¸¤ä¸ªåŒ…éƒ½æœªå®‰è£…
 if "%REQUESTS_INSTALLED%"=="false" if "%NATSORT_INSTALLED%"=="false" (
     pip install -r requirements.txt
 )
 
-:: ¼ì²éÊÇ·ñ°²×°ÁËPyInstaller
+:: æ£€æŸ¥æ˜¯å¦å®‰è£…äº†PyInstaller
 pip show pyinstaller >nul 2>&1
 if %ERRORLEVEL% neq 0 (
-    echo "ÕıÔÚ°²×°PyInstaller..."
+    echo "æ­£åœ¨å®‰è£…PyInstaller..."
     pip install pyinstaller
 )
 
-:: ´ò°ü³ÌĞò
-pyinstaller --onefile --windowed ^
+:: æ‰“åŒ…ç¨‹åº
+pyinstaller --windowed ^
     --icon=favicon.ico ^
     --add-data "config.ini;." ^
     --add-data "favicon.ico;." ^
@@ -49,9 +49,9 @@ pyinstaller --onefile --windowed ^
     --name M3U8_Downloader ^
     m3u8_downloader.py
 
-:: ¸´ÖÆ±ØÒªÎÄ¼şµ½distÄ¿Â¼
+:: å¤åˆ¶å¿…è¦æ–‡ä»¶åˆ°distç›®å½•
 xcopy /Y config.ini buildDist\
 xcopy /E /I /Y ffmpeg buildDist\ffmpeg\
 xcopy /E /I /Y downloads buildDist\downloads\
 
-echo "´ò°üÍê³É! ³ÌĞòÔÚ buildDist Ä¿Â¼ÖĞ"
+echo "æ‰“åŒ…å®Œæˆ! ç¨‹åºåœ¨ buildDist ç›®å½•ä¸­"
