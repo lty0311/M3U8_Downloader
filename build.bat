@@ -39,7 +39,7 @@ if %ERRORLEVEL% neq 0 (
 )
 
 :: 打包程序
-pyinstaller --windowed ^
+pyinstaller --onefile --windowed ^
     --icon=favicon.ico ^
     --add-data "config.ini;." ^
     --add-data "favicon.ico;." ^
